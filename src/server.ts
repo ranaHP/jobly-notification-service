@@ -8,7 +8,7 @@ import { healthRoutes } from '@notifications/route';
 import { checkConnection } from '@notifications/elasticsearch';
 import { createConnection } from '@notifications/queues/connecion';
 import { Channel } from 'amqplib';
-import { connectAuthEmailMessage } from '@notifications//emails/email.consumer';
+import { connectAuthEmailMessage, connectOrderEmailMessage } from '@notifications//emails/email.consumer';
 
 const SERVER_PORT = config.SERVER_PORT || 4001;
 const log: Logger = winstonLogger(`${config.ELASTICSEARCH_URL}`, {
@@ -28,6 +28,10 @@ export function start(app: Application): void {
 async function startQueues(): Promise<void> {
     const emailChannel:Channel = await createConnection() as Channel;
     await connectAuthEmailMessage(emailChannel); 
+
+    // ------------ Order Email Queue------------------
+    const orderChannel:Channel = await createConnection() as Channel;
+    await connectOrderEmailMessage(orderChannel); 
 
     // await emailChannel.assertExchange('jobly-email-notification-exchange', 'direct', { durable: true });
     // const message = JSON.stringify({ message: 'Hello from Notification Service!' });

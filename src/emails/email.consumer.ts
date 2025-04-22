@@ -43,4 +43,36 @@ async function connectAuthEmailMessage(channel: Channel): Promise<void> {
 
 }
 
-export { connectAuthEmailMessage };
+async function connectOrderEmailMessage(channel: Channel): Promise<void> {
+    try {
+        if (!channel) {
+            channel = await createConnection() as Channel;
+        }
+
+        const exchangeName = 'jobly-order-notification-exchange';
+        const routingKey = 'order-email';
+        const queueName = 'order-email-queue';
+
+        await channel.assertExchange(exchangeName, 'direct', { durable: true });
+        const joblyQueue = await channel.assertQueue(queueName, { durable: true, autoDelete: false });
+        await channel.bindQueue(joblyQueue.queue, exchangeName, routingKey);
+        channel.consume(joblyQueue.queue, async (message: ConsumeMessage | null) => {
+            if (message) {
+                try {
+                    const content = JSON.parse(message.content.toString());
+                    log.info(`NotificationService order email consume received message:`);
+                    console.log(content);
+                    channel.ack(message);
+                } catch
+                (error) {
+                    log.error(`NotificationService connectOrderEmailMessage() method:` + error);
+                }
+            }
+        }, { noAck: false });
+
+    } catch (error) {
+        log.error(`NotificationService connectOrderEmailMessage() method:` + error);
+    }
+
+}
+export { connectAuthEmailMessage, connectOrderEmailMessage   };
