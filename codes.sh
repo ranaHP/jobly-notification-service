@@ -11,3 +11,7 @@ npm i pino-pretty
 npm i express express-async-errors amqplib dotenv ejs email-templates http-status-codes nodemailer winston
 
 npm i -D @types/express @types/ejs @types/email-templates @types/nodemailer @types/winston @types/amqplib
+
+npm i nodemilailer ejs email-templates
+
+https://ethereal.email/create

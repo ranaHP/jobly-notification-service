@@ -8,13 +8,13 @@ import { healthRoutes } from '@notifications/route';
 import { checkConnection } from '@notifications/elasticsearch';
 import { createConnection } from '@notifications/queues/connecion';
 import { Channel } from 'amqplib';
-import { connectAuthEmailMessage, connectOrderEmailMessage } from '@notifications//emails/email.consumer';
+import { connectAuthEmailMessage, connectOrderEmailMessage } from '@notifications/queues/email.consumer';
 
 const SERVER_PORT = config.SERVER_PORT || 4001;
 const log: Logger = winstonLogger(`${config.ELASTICSEARCH_URL}`, {
     username: `elastic`,
     password: `admin1234`
-},'NotificationService', 'debug');
+}, 'NotificationService', 'debug');
 
 export function start(app: Application): void {
     startServer(app);
@@ -26,16 +26,27 @@ export function start(app: Application): void {
 }
 
 async function startQueues(): Promise<void> {
-    const emailChannel:Channel = await createConnection() as Channel;
-    await connectAuthEmailMessage(emailChannel); 
+    const emailChannel: Channel = await createConnection() as Channel;
+    await connectAuthEmailMessage(emailChannel);
+    await connectOrderEmailMessage(emailChannel);
 
-    // ------------ Order Email Queue------------------
-    const orderChannel:Channel = await createConnection() as Channel;
-    await connectOrderEmailMessage(orderChannel); 
+    // const verificationURL = `${config.CLIENT_URL}/verify-email?token=13123123123`;
+    // const resetURL = `${config.CLIENT_URL}/reset-password?token=13123123123`;
+    // const email1 = JSON.stringify({
+    //     receiverEmail: config.SENDER_EMAIL
+    //     , username: 'Rana'
+    //     , verifyLink: verificationURL
+    //     , resetLink: resetURL
+    //     , template: 'forgotPassword'
+    // });
 
     // await emailChannel.assertExchange('jobly-email-notification-exchange', 'direct', { durable: true });
-    // const message = JSON.stringify({ message: 'Hello from Notification Service!' });
+    // const message = JSON.stringify(email1);
     // emailChannel.publish('jobly-email-notification-exchange', 'auth-email', Buffer.from(message));
+
+    //     await emailChannel.assertExchange('jobly-order-notification-exchange', 'direct', { durable: true });
+    //     const message1 = JSON.stringify({ message: 'Hello from Order Email Notification Service!' });
+    //     emailChannel.publish('jobly-order-notification-exchange', 'order-email', Buffer.from(message1));
 }
 
 function starElasticSearch() {

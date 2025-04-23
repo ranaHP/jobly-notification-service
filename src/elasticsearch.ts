@@ -1,5 +1,5 @@
 import { Client } from "@elastic/elasticsearch";
-import { config } from "./config";
+import { config } from "@notifications/config";
 import { winstonLogger } from "@ranahp/jobly-micro-service-helper";
 import { Logger } from "winston";
 import { ClusterHealthResponse } from "@elastic/elasticsearch/lib/api/types";
