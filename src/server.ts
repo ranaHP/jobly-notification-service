@@ -8,7 +8,7 @@ import { healthRoutes } from '@notifications/route';
 import { checkConnection } from '@notifications/elasticsearch';
 import { createConnection } from '@notifications/queues/connecion';
 import { Channel } from 'amqplib';
-import { connectAuthEmailMessage, connectOrderEmailMessage } from '@notifications/queues/email.consumer';
+import { consumeAuthEmailMessages, consumeOrderEmailMessages } from '@notifications/queues/email.consumer';
 
 const SERVER_PORT = config.SERVER_PORT || 4001;
 const log: Logger = winstonLogger(`${config.ELASTICSEARCH_URL}`, {
@@ -27,8 +27,8 @@ export function start(app: Application): void {
 
 async function startQueues(): Promise<void> {
     const emailChannel: Channel = await createConnection() as Channel;
-    await connectAuthEmailMessage(emailChannel);
-    await connectOrderEmailMessage(emailChannel);
+    await consumeAuthEmailMessages(emailChannel);
+    await consumeOrderEmailMessages(emailChannel);
 
     // const verificationURL = `${config.CLIENT_URL}/verify-email?token=13123123123`;
     // const resetURL = `${config.CLIENT_URL}/reset-password?token=13123123123`;

@@ -10,8 +10,7 @@ const log: Logger = winstonLogger(`${config.ELASTICSEARCH_URL}`, {
     password: `admin1234`
 }, 'notificationQueueConnection', 'debug');
 
-
-async function connectAuthEmailMessage(channel: Channel): Promise<void> {
+async function consumeAuthEmailMessages(channel: Channel): Promise<void> {
     try {
         if (!channel) {
             channel = await createConnection() as Channel;
@@ -54,7 +53,7 @@ async function connectAuthEmailMessage(channel: Channel): Promise<void> {
 
 }
 
-async function connectOrderEmailMessage(channel: Channel): Promise<void> {
+async function consumeOrderEmailMessages(channel: Channel): Promise<void> {
     try {
         if (!channel) {
             channel = await createConnection() as Channel;
@@ -141,4 +140,4 @@ async function connectOrderEmailMessage(channel: Channel): Promise<void> {
     }
 
 }
-export { connectAuthEmailMessage, connectOrderEmailMessage };
+export { consumeAuthEmailMessages, consumeOrderEmailMessages };

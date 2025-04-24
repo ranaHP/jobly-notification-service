@@ -9,20 +9,20 @@ const log: Logger = winstonLogger(`${config.ELASTICSEARCH_URL}`, {
 }, 'notificationQueueConnection', 'debug');
 
 
-async function createConnection (): Promise<Channel | undefined> {
-    try{
+async function createConnection(): Promise<Channel | undefined> {
+    try {
         const connection: ChannelModel = await client.connect(`${config.RABBITMQ_ENDPOINT}`);
         const channel: Channel = await connection.createChannel();
         log.info(`NotificationService connected to RabbitMQ at ${config.RABBITMQ_ENDPOINT}`);
         closeConnection(channel, connection);
         return channel;
     } catch (error) {
-        log.error(`NotificationService createConnection() method:`+ error );
+        log.error(`NotificationService createConnection() method:` + error);
         return undefined;
     }
 }
 
-function closeConnection(channel: Channel, connection:ChannelModel): void {
+function closeConnection(channel: Channel, connection: ChannelModel): void {
     process.on('SIGINT', async () => {
         await channel.close();
         await connection.close();
@@ -31,4 +31,4 @@ function closeConnection(channel: Channel, connection:ChannelModel): void {
     });
 }
 
-export { createConnection};
+export { createConnection };

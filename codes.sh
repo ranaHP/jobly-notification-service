@@ -15,3 +15,5 @@ npm i -D @types/express @types/ejs @types/email-templates @types/nodemailer @typ
 npm i nodemilailer ejs email-templates
 
 https://ethereal.email/create
+
+config.CLIENT_LOGO
