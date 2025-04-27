@@ -17,3 +17,16 @@ npm i nodemilailer ejs email-templates
 https://ethereal.email/create
 
 config.CLIENT_LOGO
+
+
+http://elastic:admin1234@elasticsearch_container:9200
+
+taskkill /PID <pid> /F
+netstat -ano | findstr :4001
+
+
+npm install shelljs 
+enable to run shell commands in nodejs
+
+npm install pm2 -g
+this enables to run the nodejs app in the background

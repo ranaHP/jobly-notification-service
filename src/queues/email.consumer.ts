@@ -11,6 +11,7 @@ const log: Logger = winstonLogger(`${config.ELASTICSEARCH_URL}`, {
 }, 'notificationQueueConnection', 'debug');
 
 async function consumeAuthEmailMessages(channel: Channel): Promise<void> {
+    console.log('consumeAuthEmailMessages called ', config.ELASTICSEARCH_URL);
     try {
         if (!channel) {
             channel = await createConnection() as Channel;
